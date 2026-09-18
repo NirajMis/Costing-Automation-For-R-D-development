@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jaisingh Innovations — Costing Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">JI</div>
+      <div class="brand-text">
+        <strong>Costing Portal</strong>
+        <span>Jaisingh Innovations</span>
+      </div>
+    </div>
+
+    <button class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" data-view="newrun">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      New Costing Run
+    </button>
+    <button class="nav-item" data-view="history">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 3"/></svg>
+      Run History
+    </button>
+    <button class="nav-item" data-view="exceptions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+      Exceptions
+      <span class="nav-badge" id="excCount">7</span>
+    </button>
+    <button class="nav-item" data-view="ratemaster">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Rate Master
+    </button>
+
+    <div class="sidebar-foot">
+      Phase 1+2 rules engine · UI prototype<br>v0.1 · not connected to backend
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <button class="icon-btn" id="menuBtn" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div>
+        <h1 id="topTitle">Dashboard</h1>
+        <div class="topbar-sub" id="topSub">BOM cost roll-up &amp; pricing overview</div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="themeBtn" title="Toggle theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <div class="avatar" title="nexusdigital077@gmail.com">NM</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="view active" id="view-dashboard">
+
+        <div class="banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <div><strong>Prototype.</strong> Dashboard charts below use illustrative data from BY080 / BY220P / BRP27. The <strong>New Costing Run</strong> tab is different — it now really reads your uploaded .xlsx files in the browser and generates a downloadable workbook. BOM cost there is a flat Qty × Unit Price sum per FG tab, not the full §3 rules engine (categorisation, recursive sub-assembly linking, RATE MASTER price resolution) — those still need business sign-off on the ⚠ open questions below before they get hardcoded.</div>
+          <button class="banner-close">&times;</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-top"><span class="kpi-label">FGs Costed</span><span class="kpi-delta up">▲ 3</span></div>
+            <div class="kpi-value">3</div>
+            <svg class="kpi-spark" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,20 20,18 40,14 60,16 80,8 100,6" fill="none" stroke="var(--accent)" stroke-width="2"/></svg>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-top"><span class="kpi-label">Avg Gross Margin</span><span class="kpi-delta up">▲ 2.1%</span></div>
+            <div class="kpi-value">34.2%</div>
+            <svg class="kpi-spark" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,22 20,17 40,19 60,12 80,14 100,7" fill="none" stroke="var(--accent-2)" stroke-width="2"/></svg>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-top"><span class="kpi-label">Exceptions Flagged</span><span class="kpi-delta down">▼ 2</span></div>
+            <div class="kpi-value">7</div>
+            <svg class="kpi-spark" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,6 20,10 40,9 60,15 80,18 100,20" fill="none" stroke="var(--warn)" stroke-width="2"/></svg>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-top"><span class="kpi-label">Rate Master Coverage</span><span class="kpi-delta up">▲ 1.4%</span></div>
+            <div class="kpi-value">94.0%</div>
+            <svg class="kpi-spark" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,18 20,16 40,15 60,11 80,9 100,5" fill="none" stroke="var(--success)" stroke-width="2"/></svg>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3>BOM Cost by Category</h3>
+              <span class="muted">blended across last run</span>
+            </div>
+            <div class="donut-wrap">
+              <svg width="150" height="150" viewBox="0 0 42 42" id="donutChart"></svg>
+              <div class="legend" id="donutLegend"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Gross Margin by FG</h3>
+              <span class="pill">Target 30%</span>
+            </div>
+            <div class="bar-list" id="gpBars"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3>Make vs Buy Split</h3>
+              <span class="muted">% of BOM cost</span>
+            </div>
+            <div class="bar-list" id="makeBuyBars"></div>
+            <div style="display:flex;gap:16px;margin-top:14px;">
+              <div class="legend-row"><span class="legend-dot" style="background:var(--accent)"></span><span class="legend-label">Make</span></div>
+              <div class="legend-row"><span class="legend-dot" style="background:var(--accent-2)"></span><span class="legend-label">Buy</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h3>Price Resolution Source</h3>
+              <span class="muted">RATE MASTER, this run</span>
+            </div>
+            <div class="bar-list" id="sourceBars"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-head">
+            <h3>Open Questions — Pending Business Sign-off</h3>
+            <span class="badge warn"><span class="badge-dot"></span>4 open</span>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">1</div>
+            <div class="oq-body">
+              <p><strong>Category taxonomy.</strong> BRP27's manual sheet used Housing / L2 / Driver / SPD / Consumable / Hardware / Wiring — a different set than the documented Hardware/Packing/Housing/Electronics/Consumables/Wires/Labour.</p>
+              <div class="oq-impact">Impact: changes which bucket every BOM line lands in.</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">2</div>
+            <div class="oq-body">
+              <p><strong>AI driver tab structure.</strong> README says the AI portion (205-prefixed) gets its own linked tab; BRP27 embedded it inside the MI portion's sheet instead.</p>
+              <div class="oq-impact">Impact: recursive linking logic needs to support both, or one must be picked.</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">3</div>
+            <div class="oq-body">
+              <p><strong>Drill &amp; tap charge placement.</strong> Documented rule excludes drill/tap from the Phase-1 total (reference line only); BRP27's manual sheet folded it into the housing total.</p>
+              <div class="oq-impact">Impact: changes the BOM Cost number, not just presentation. Should ship as a configurable flag.</div>
+            </div>
+          </div>
+          <div class="oq-item">
+            <div class="oq-num">4</div>
+            <div class="oq-body">
+              <p><strong>SPD assembly %.</strong> One product's SPD sheet reused the driver-potted 15% instead of an independent SPD %.</p>
+              <div class="oq-impact">Impact: determines whether Input Sheet fields E and F may ever be assumed equal.</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============ NEW RUN ============ -->
+      <section class="view" id="view-newrun">
+
+        <div class="section-head">
+          <div>
+            <h2>New Costing Run</h2>
+            <p>Upload the required inputs, complete the Input Sheet, then run the engine. (Item Sub Sub Group / ItemSubgroup come from a built-in Item Master — no upload needed.)</p>
+          </div>
+          <span class="pill" id="productCategoryPill">Category: Casting-based</span>
+        </div>
+
+        <div class="wizard-steps">
+          <div class="wstep active" data-step="1"><span class="num">1</span> Upload Files</div>
+          <div class="wstep" data-step="2"><span class="num">2</span> Input Sheet</div>
+          <div class="wstep" data-step="3"><span class="num">3</span> Review &amp; Run</div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="wpanel active" id="wpanel-1">
+          <div class="card">
+            <div class="card-head">
+              <h3>Required Files</h3>
+              <span class="muted">.xlsx — header row detected automatically in first 7 rows</span>
+            </div>
+            <div class="dropzone-grid" id="dropzoneGrid">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <div class="card" id="sapB1Card">
+            <div class="card-head">
+              <h3>Fetch from SAP Business One</h3>
+              <span class="muted" id="sapB1ModeBadge">checking…</span>
+            </div>
+            <div class="form-grid" style="margin-bottom:12px;">
+              <div class="field">
+                <label>Backend URL</label>
+                <div class="field-input">
+                  <input type="text" id="sapB1BackendUrl" placeholder="http://localhost:4000">
+                </div>
+              </div>
+            </div>
+            <button class="btn" id="sapB1FetchBtn">⚡ Fetch BOM / Price List / BP Catalogue / FG Price List</button>
+            <div class="empty-note" id="sapB1Status" style="margin-top:10px;">Fills the 4 dropzones above automatically — Input Sheet still stays a manual form (Step 2). Needs the <code>backend/</code> server running (see backend/README.md).</div>
+          </div>
+
+          <div class="wizard-nav">
+            <span></span>
+            <button class="btn primary" id="toStep2">Next: Input Sheet →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="wpanel" id="wpanel-2">
+          <div id="accordionRoot"></div>
+          <div class="wizard-nav">
+            <button class="btn" id="toStep1">← Back</button>
+            <button class="btn primary" id="toStep3">Next: Review →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="wpanel" id="wpanel-3">
+          <div class="card" id="reviewCard">
+            <div class="card-head">
+              <h3>Review</h3>
+              <span class="muted">confirm before running</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <tbody id="reviewBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" id="runCard">
+            <div class="card-head">
+              <h3>Run Costing Engine</h3>
+              <span class="muted">Phase 1 → Phase 2</span>
+            </div>
+            <button class="btn primary" id="runBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run Costing Engine
+            </button>
+            <div class="progress-track" id="progressTrack" style="display:none;"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="run-log" id="runLog" style="display:none;"></div>
+          </div>
+
+          <div id="resultBlock" style="display:none;">
+            <div class="result-hero">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div>
+                <h3 id="resultHeroTitle">Run complete — workbook ready</h3>
+                <p id="resultHeroSub">BOM cost summed from your uploaded SAP BOM Dump; 12NC / description / PO price matched from BP Catalogue &amp; FG Price List.</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <h3>Final Summary</h3>
+                <button class="btn sm primary" id="downloadBtn">⬇ Download Workbook (.xlsx)</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Sr</th><th>Wattage</th><th>Item No.</th><th>12NC</th><th>Description</th><th>PO Price</th><th id="newPriceHead">New Price</th><th id="costingHead">Costing On</th><th>Diff. vs PO</th><th id="oldCostingHead">Old Costing</th><th>Change vs Old</th></tr></thead>
+                  <tbody id="resultBody"></tbody>
+                </table>
+              </div>
+              <div class="empty-note" id="resultNote"></div>
+              <div class="table-wrap" id="runExceptionsWrap" style="display:none;margin-top:14px;">
+                <div style="font-size:11.5px;font-weight:600;color:var(--warn);margin-bottom:6px;">Flagged during this run</div>
+                <table>
+                  <thead><tr><th>Item / FG</th><th>Issue</th></tr></thead>
+                  <tbody id="runExceptionsBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <button class="btn" id="toStep2b">← Back</button>
+            <span></span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============ HISTORY ============ -->
+      <section class="view" id="view-history">
+        <div class="section-head">
+          <div><h2>Run History</h2><p>Real runs from this browser — validate which date each FG was costed on, and compare Old vs New costing.</p></div>
+          <button class="btn sm ghost" id="clearHistoryBtn">Clear history</button>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Run Date</th><th>FG Code</th><th>Wattage</th><th>Old Costing</th><th>Old Costing Date</th><th>New Costing (this run)</th><th>Change vs Old</th><th>Diff vs PO</th><th>Exceptions</th></tr>
+              </thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EXCEPTIONS ============ -->
+      <section class="view" id="view-exceptions">
+        <div class="section-head">
+          <div><h2>Exceptions &amp; Audit</h2><p>Nothing is silently dropped — every flagged line lands here.</p></div>
+        </div>
+        <div class="card"> 
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Item Code</th><th>Description</th><th>FG / Sheet</th><th>Issue Type</th><th>Flagged</th><th>Status</th></tr>
+              </thead>
+              <tbody id="exceptionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RATE MASTER ============ -->
+      <section class="view" id="view-ratemaster">
+        <div class="section-head">
+          <div><h2>Rate Master</h2><p>Single source of truth for every priced item — with manual override.</p></div>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Item Code</th><th>Description</th><th>Resolved Rate</th><th>Source</th><th>Last Update</th><th>Vendor</th><th></th></tr>
+              </thead>
+              <tbody id="rateMasterBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="item-master-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

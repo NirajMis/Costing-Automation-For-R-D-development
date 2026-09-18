@@ -1,0 +1,18 @@
+{
+  "name": "costing-portal-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend for the Jaisingh Innovations Costing Portal — proxies SAP Business One Service Layer and serves BOM Dump / Price List / BP Catalogue / FG Price List as .xlsx, in the exact shape the portal's frontend (app.js) already parses. Ships with a mock mode so the whole pipeline works before SAP B1 Service Layer access is confirmed.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  }
+}
